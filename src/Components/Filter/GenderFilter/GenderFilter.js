@@ -6,8 +6,10 @@ import { Genders } from "./Genders/Genders";
 export const GenderFilter = (props) => {
     const genders = props.filter.map((el, index) => (
         <Genders
+            handlerPick={props.handlerPick}
             name={capitalize(el.name)}
             key={index}
+            url={el.url}
         />
     ))
 
