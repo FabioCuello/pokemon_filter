@@ -78,69 +78,45 @@ export const Filter = () => {
         })
     )
 
+    const addOrDeleteFilterHandler = (url, action) => {
+        setStateFilters(prevState => {
+            const { selected: { filters } } = prevState
+            let newFilters
+            if (action === "add") {
+                newFilters = [...filters, url]
+            }
+            if (action === "remove") {
+                newFilters = filters.filter(urlActive => !url.includes(urlActive))
+            }
 
+            const newSelected = {
+                filters: newFilters
+            }
 
-    //handler->promesa->useState (setStateHook)
-    // handler -> useState -> promesa
+            return ({
+                ...prevState,
+                selected: newSelected
+            })
+        })
+    }
 
-    // useEffect(() => {
-    //     getData(someParam).then(data => setState(data))
-    //   }, [someParam]) 
-
-    // FIXME fix lastState
-
-    // const addOrDeleteFilterHandler = (url, action) => {
-
-
-
-    // }
-
-    const filterHandler = async (url, action) => {
+    useEffect(() => {
         let activeFilter = stateFilters.selected.filters
 
-
-        let newAxios
-        if (action === "add") {
-            newAxios = axios(url)
-        }
-
-        Promise.all([...activeFilter.map(urlActive => axios(urlActive)), newAxios])
+        Promise.all([...activeFilter.map(urlActive => axios(urlActive))])
             .then(results => {
 
-                setStateFilters(prevState => {
-                    console.log(results)
-                    const dataArray = results.filter(data => !!data)
-                        .map(result => result.data.pokemon)
-                        .map(arrayItems => arrayItems.map(i => Number(i.pokemon.url.split("/")[6])))
+                const dataArray = results.filter(data => !!data)
+                    .map(result => result.data.pokemon)
+                    .map(arrayItems => arrayItems.map(i => Number(i.pokemon.url.split("/")[6])))
 
-                    // .map(arrayItems => arrayItems.map(i => Number(i.pokemon.url.split("/")[6])))
-                    //map(arrayItems => arrayItems.map(i => Number(i.url.split("/")[6])))
+                // .map(arrayItems => arrayItems.map(i => Number(i.pokemon.url.split("/")[6])))
+                //map(arrayItems => arrayItems.map(i => Number(i.url.split("/")[6])))
 
-                    const newShowedPokemons = findInterception(dataArray[0], dataArray.slice(1))
-                    console.log(newShowedPokemons)
-
-                    const { selected: { filters } } = prevState
-                    let newFilters
-                    if (action === "add") {
-                        newFilters = [...filters, url]
-                    }
-                    if (action === "remove") {
-                        newFilters = filters.filter(urlActive => !url.includes(urlActive))
-                    }
-
-                    const newSelected = {
-                        filters: newFilters
-                    }
-
-                    return ({
-                        ...prevState,
-                        selected: newSelected
-                    })
-                })
+                const newShowedPokemons = findInterception(dataArray[0], dataArray.slice(1))
+                console.log(newShowedPokemons)
             })
-
-
-    }
+    }, [stateFilters.selected.filters])
 
     return (
         <Fragment>
@@ -150,12 +126,12 @@ export const Filter = () => {
                 filter={stateFilters.types.types}
                 show={stateFilters.types.showMore}
                 ClickShow={clickMoreOrLess}
-                handlerClick={filterHandler}
+                handlerClick={addOrDeleteFilterHandler}
             />
             <div className="divider"></div>
             <ColorFilter
                 filter={stateFilters.colors.types}
-                handlerClick={filterHandler}
+                handlerClick={addOrDeleteFilterHandler}
             />
             <div className="divider"></div>
             <GenderFilter filter={stateFilters.genders.types} />
