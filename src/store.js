@@ -23,7 +23,6 @@ const initialState = {
     },
     searchBox: {
         input: "",
-        submit: false
     }
     ,
     selected: {
@@ -299,8 +298,39 @@ const reducer = (state = initialState, action) => {
 
     if (action.type === "filterInput") {
         const input = state.searchBox.input
-
         const allPokemons = JSON.parse(localStorage.getItem("pokemonsInStorage"))
+
+        if (!!Number(input)) {
+
+            const newSelected = {
+                ...state.selected,
+                input: [Number(input)]
+            }
+
+            return ({
+                ...state,
+                selected: newSelected
+            })
+
+        }
+
+        const inputIsCombine = input.split("")
+            .reduce((acc, el) => {
+                return acc = !!Number(el) || acc
+            }, false)
+
+        if (inputIsCombine) {
+            const newSelected = {
+                ...state.selected,
+                input: [-1]
+            }
+
+            return ({
+                ...state,
+                selected: newSelected
+            })
+        }
+
         const allPokemonsName = allPokemons.map(pokemons => pokemons.pokemon_species.name)
 
         const pokemonsFilteredName = allPokemonsName.filter(name => name.includes(input))

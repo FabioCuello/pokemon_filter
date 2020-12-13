@@ -35,7 +35,6 @@ const Navbar = ({ props, changeInput, filterInput, changeFilter }) => {
 
             <div className="searchBox" >
                 <input type="text" value={props.searchBox.input} onChange={changeInput} ></input>
-                <button> Search</button>
             </div>
         </div>
     )
