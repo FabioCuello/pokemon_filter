@@ -1,0 +1,7 @@
+
+.searchBox {
+    position: absolute;
+    right: 15rem;
+    top: 50%;
+    display: inline-block
+}

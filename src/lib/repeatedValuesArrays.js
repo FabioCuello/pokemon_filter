@@ -1,4 +1,4 @@
-export const findInterception = (firstArray, arrays) => {
+export const findInterception = (firstArray, arrays, length = "No") => {
     let result
     let memo = firstArray
 
@@ -12,9 +12,11 @@ export const findInterception = (firstArray, arrays) => {
         memo = result
     }
 
-    if (result.length > 5) {
-        result = result.slice(0, 6)
+    if (length !== "no" && result.length > length - 1) {
+        result = result.slice(0, length)
+
     }
 
     return result
 }
+

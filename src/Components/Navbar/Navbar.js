@@ -1,30 +1,70 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
 import { Logo } from "./Logo/Logo"
+import "./Navbar.css"
 
-export const Navbar = () => {
-    const Style = {
-        div: {
-            position: "relative",
-            margin: "1rem 5rem 2.5rem",
-        },
-        logo: {
-            backgroundColor: "white",
-            maxWidth: "5rem"
-        },
-        searchBox: {
-            position: "absolute",
-            right: "15rem",
-            top: "50%",
-            display: "inline-block"
-        }
 
+
+const Navbar = ({ props, changeInput, filterInput, changeFilter }) => {
+
+    const style = {
+        position: "relative",
+        margin: "1rem 5rem 2.5rem"
     }
 
-    return (
-        <div style={Style.div}>
-            <Logo style={Style.logo} />
 
-            <div style={Style.searchBox} >SearchBox</div>
+    useEffect(() => {
+        const timer = setTimeout(() => {
+
+
+            filterInput()
+        }, 1000)
+        return () => {
+            clearTimeout(timer)
+
+        }
+    }, [props.searchBox.input])
+
+
+
+    return (
+        <div style={style}>
+            <div className="logo" >
+                <Logo />
+            </div>
+
+            <div className="searchBox" >
+                <input type="text" value={props.searchBox.input} onChange={changeInput} ></input>
+                <button> Search</button>
+            </div>
         </div>
     )
 }
+
+const mapStateToProps = props => ({
+    props: props
+})
+
+const mapDispatchToProps = dispatch => ({
+    changeInput(input) {
+        dispatch({
+            type: "changeInput",
+            input
+        })
+    },
+
+    filterInput() {
+        dispatch({
+            type: "filterInput"
+        })
+    },
+
+    changeFilter() {
+        dispatch({
+            type: "changeFilter"
+        })
+    }
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar)

@@ -1,7 +1,8 @@
 import React from 'react'
 import logo from "./Logo.png"
+import "./Logo.css"
 
 export const Logo = (props) => {
 
-    return <img style={props.style} alt={"logo"} src={logo} />
+    return <img className="logo" alt={"logo"} src={logo} />
 }

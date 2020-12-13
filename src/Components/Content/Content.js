@@ -26,9 +26,9 @@ const Content = ({ props, initContent, handlerMoreContent, changeFilter }) => {
     return (
         <Fragment>
             <Paragraph
-                pokemons={props.pokemons}
+                pokemons={props.pokemons.list}
             />
-            <Cards pokemons={props.pokemons} />
+            <Cards pokemons={props.pokemons.list} />
             {props.buttonOn ? <button onClick={() => { handlerMoreContent() }} >Load More</button> : null}
         </Fragment>
     )

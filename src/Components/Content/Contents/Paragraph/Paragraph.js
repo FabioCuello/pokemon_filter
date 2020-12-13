@@ -1,7 +1,6 @@
 import React from "react"
 
 export const Paragraph = (props) => {
-    console.log(props.pokemons.length)
 
     let paragraprahDisplay
 

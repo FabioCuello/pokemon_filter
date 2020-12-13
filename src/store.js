@@ -3,7 +3,10 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { findInterception } from './lib/repeatedValuesArrays';
 
 const initialState = {
-    pokemons: [],
+    pokemons: {
+        list: [],
+        count: 6
+    },
     buttonOn: true,
     types: {
         types: [],
@@ -18,10 +21,17 @@ const initialState = {
         types: [],
         selected: []
     },
+    searchBox: {
+        input: "",
+        submit: false
+    }
+    ,
     selected: {
         types: [],
         colors: [],
-        genders: []
+        genders: [],
+        input: []
+
     }
 }
 
@@ -165,10 +175,15 @@ const reducer = (state = initialState, action) => {
 
         return ({
             ...state,
-            pokemons: action.pokemonList.slice(0, 6),
+            pokemons: {
+                list: action.pokemonList.slice(0, 6),
+                count: 6
+            },
             buttonOn: state.buttonOn
         })
     }
+
+    // TODO import a function to do all this logic
 
     if (action.type === "changeFilter") {
 
@@ -180,6 +195,10 @@ const reducer = (state = initialState, action) => {
         let gendersPokemonsFiltered = state.selected.genders.length === 0 ? allPokemonsId : (
             state.selected.genders
         )
+        let inputPokemonsFilteres = state.selected.input.length === 0 ? allPokemonsId : (
+            state.selected.input
+        )
+
 
         if (typeof (typesPokemonsFiltered) == "undefined") {
             typesPokemonsFiltered = allPokemonsId
@@ -188,35 +207,118 @@ const reducer = (state = initialState, action) => {
             colorsPokemonsFiltered = allPokemonsId
         }
 
-        const allPokemonsPreFilteredId = [typesPokemonsFiltered, colorsPokemonsFiltered, gendersPokemonsFiltered]
-        const allPokemonsFilteredId = findInterception(allPokemonsPreFilteredId[0], allPokemonsPreFilteredId.slice(1))
+        const allPokemonsPreFilteredId = [typesPokemonsFiltered, colorsPokemonsFiltered, gendersPokemonsFiltered, inputPokemonsFilteres]
+
+        const allPokemonsFilteredId = findInterception(allPokemonsPreFilteredId[0], allPokemonsPreFilteredId.slice(1), 6)
+        const allPokemonsWithNoFilter = findInterception(allPokemonsPreFilteredId[0], allPokemonsPreFilteredId.slice(1))
+
+        const showPokemons = allPokemons
+            .map(el => (allPokemonsFilteredId.includes(el.entry_number) ? el : undefined))
+            .filter(el2 => el2 !== undefined)
+
+        let newButtonState = true
+
+        if (allPokemonsWithNoFilter.length <= 6) {
+            newButtonState = false
+        }
+        return ({
+            ...state,
+            pokemons: {
+                list: showPokemons,
+                count: 6
+            },
+            buttonOn: newButtonState
+        })
+
+    }
+
+    // TODO import a function to do all this logic
+
+    if (action.type === "handlerMoreContent") {
+        const newCount = state.pokemons.count + 6
+
+        const allPokemons = JSON.parse(localStorage.getItem("pokemonsInStorage"))
+        const allPokemonsId = allPokemons.map(pokemon => pokemon.entry_number)
+
+        let typesPokemonsFiltered = findInterception(state.selected.types[0], state.selected.types.slice(1))
+        let colorsPokemonsFiltered = findInterception(state.selected.colors[0], state.selected.colors.slice(1))
+        let gendersPokemonsFiltered = state.selected.genders.length === 0 ? allPokemonsId : (
+            state.selected.genders
+        )
+        let inputPokemonsFilteres = state.selected.input.length === 0 ? allPokemonsId : (
+            state.selected.input
+        )
+
+        if (typeof (typesPokemonsFiltered) == "undefined") {
+            typesPokemonsFiltered = allPokemonsId
+        }
+        if (typeof (colorsPokemonsFiltered) == "undefined") {
+            colorsPokemonsFiltered = allPokemonsId
+        }
+
+        const allPokemonsPreFilteredId = [typesPokemonsFiltered, colorsPokemonsFiltered, gendersPokemonsFiltered, inputPokemonsFilteres]
+        const allPokemonsFilteredId = findInterception(allPokemonsPreFilteredId[0], allPokemonsPreFilteredId.slice(1), newCount)
+
+
+        const allPokemonsWithNoFilter = findInterception(allPokemonsPreFilteredId[0], allPokemonsPreFilteredId.slice(1))
 
         const showPokemons = allPokemons
             .map(el => (allPokemonsFilteredId.includes(el.entry_number) ? el : undefined))
             .filter(el2 => el2 !== undefined)
 
 
+        let newButtonState = true
+
+        if (allPokemonsWithNoFilter.length <= newCount) {
+            newButtonState = false
+        }
+
+        const newPokemons = {
+            list: showPokemons,
+            count: newCount
+        }
+
         return ({
             ...state,
-            pokemons: showPokemons
+            pokemons: newPokemons,
+            buttonOn: newButtonState
         })
 
     }
 
-    if (action.type === "handlerMoreContent") {
-        const prevStateId = state.pokemons[state.pokemons.length - 1].entry_number
-
-        // TODO: find interception between allPokemons and Selected poquemos
-        const allPokemons = JSON.parse(localStorage.getItem("pokemonsInStorage"))
-        const newPokemons = allPokemons.slice(prevStateId, prevStateId + 20)
-        const newState = [...state.pokemons, ...newPokemons]
+    if (action.type === "changeInput") {
 
         return ({
             ...state,
-            pokemons: newState,
-            buttonOn: newState.length === allPokemons.length ? false : true
+            searchBox: {
+                ...state.searchBox,
+                input: action.input.target.value
+            }
         })
+    }
 
+    if (action.type === "filterInput") {
+        const input = state.searchBox.input
+
+        const allPokemons = JSON.parse(localStorage.getItem("pokemonsInStorage"))
+        const allPokemonsName = allPokemons.map(pokemons => pokemons.pokemon_species.name)
+
+        const pokemonsFilteredName = allPokemonsName.filter(name => name.includes(input))
+        const pokemonsFilteredId = allPokemons
+            .map(pokemons => pokemonsFilteredName.includes(pokemons.pokemon_species.name) ? pokemons : undefined)
+            .filter(el2 => el2 !== undefined)
+            .map(el3 => el3.entry_number)
+
+
+        const newSelected = {
+            ...state.selected,
+            input: pokemonsFilteredId
+        }
+
+        return ({
+            ...state,
+            selected: newSelected
+        })
     }
 
     return state

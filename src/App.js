@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import store from './store';
 import "./App.css"
-import { Navbar } from "./Components/Navbar/Navbar"
+import Navbar from "./Components/Navbar/Navbar"
 import Filter from "./Components/Filter/Filter"
 import Content from "./Components/Content/Content"
 
