@@ -11,6 +11,10 @@ export const findInterception = (firstArray, arrays) => {
 
         memo = result
     }
-    return result
 
+    if (result.length > 5) {
+        result = result.slice(0, 6)
+    }
+
+    return result
 }

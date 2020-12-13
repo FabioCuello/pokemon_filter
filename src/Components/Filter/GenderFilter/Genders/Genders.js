@@ -1,9 +1,6 @@
 import React from 'react'
 
 export const Genders = (props) => {
-
-
-
     return (
 
         <div className="col s12">

@@ -1,4 +1,5 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect } from 'react'
+import { connect } from 'react-redux'
 import { TypeFilters } from "./TypeFilter/TypeFilters"
 import { ColorFilter } from "./ColorFilter/ColorFilter"
 import { GenderFilter } from "./GenderFilter/GenderFilter"
@@ -6,29 +7,9 @@ import { findInterception } from '../../lib/repeatedValuesArrays'
 
 import axios from "axios"
 
-export const Filter = () => {
-    const [stateFilters, setStateFilters] = useState({
-        types: {
-            types: [],
-            showMore: false,
-            selected: []
-        },
-        colors: {
-            types: [],
-            selected: []
-        },
-        genders: {
-            types: [],
-            selected: []
-        },
-        selected: {
-            types: [],
-            colors: [],
-            genders: []
-        }
-    })
-
+const Filter = ({ props, initUseEffect, clickMoreOrLess, addOrDeleteTypesHandler, addOrDeleteColorHandler, gendersHandler, setTypeSelect, setColorSelect, setGenderSelect }) => {
     useEffect(() => {
+
         const getFilterTypes = axios.get("https://pokeapi.co/api/v2/type")
         const getFilterColors = axios.get("https://pokeapi.co/api/v2/pokemon-color")
         const getFilterGenders = axios.get("https://pokeapi.co/api/v2/gender")
@@ -42,111 +23,12 @@ export const Filter = () => {
                     colors: colors.data.results,
                     genders: genders.data.results
                 }
-
-                setStateFilters(prevState => ({
-                    ...prevState,
-                    types: {
-                        ...prevState.types,
-                        types: newState.types.slice(0, 9),
-                        showMore: prevState.types.showMore,
-                    },
-                    colors: {
-                        ...prevState.colors,
-                        types: newState.colors,
-                    },
-                    genders: {
-                        ...prevState.genders,
-                        types: newState.genders,
-                    },
-                }))
+                initUseEffect(newState)
             })
     }, [])
 
-    const clickMoreOrLess = () => (
-        setStateFilters(prevState => {
-
-            const newStateFilter = {
-                ...prevState.types,
-                showMore: !prevState.types.showMore
-            }
-
-            if (!prevState.types.showMore) {
-                newStateFilter.types = JSON.parse(localStorage.getItem("typesInStorage"))
-            } else {
-                newStateFilter.types = JSON.parse(localStorage.getItem("typesInStorage")).slice(0, 9)
-            }
-
-            return ({
-                ...prevState,
-                types: newStateFilter
-            })
-        })
-    )
-
-    const addOrDeleteTypesHandler = (url, action) => {
-        setStateFilters(prevState => {
-            const { types: { selected } } = prevState
-            let newSelected
-
-            if (action === "add") {
-                newSelected = [...selected, url]
-            }
-            if (action === "remove") {
-                newSelected = selected.filter(urlActive => !url.includes(urlActive))
-            }
-
-            const newTypes = {
-                ...prevState.types,
-                selected: newSelected
-            }
-            return ({
-                ...prevState,
-                types: newTypes
-            })
-        })
-    }
-
-    const addOrDeleteColorHandler = (url, action) => {
-        setStateFilters(prevState => {
-            const { colors: { selected } } = prevState
-            let newSelected
-
-            if (action === "add") {
-                newSelected = [...selected, url]
-            }
-            if (action === "remove") {
-                newSelected = selected.filter(urlActive => !url.includes(urlActive))
-            }
-
-            const newTypes = {
-                ...prevState.colors,
-                selected: newSelected
-            }
-            return ({
-                ...prevState,
-                colors: newTypes
-            })
-        })
-    }
-
-    const gedersHandler = (url) => {
-        setStateFilters(prevState => {
-            let newSelected = url
-
-            const newGender = {
-                ...prevState.genders,
-                selected: newSelected
-            }
-
-            return ({
-                ...prevState,
-                genders: newGender
-            })
-        })
-    }
-
     useEffect(() => {
-        let activeFilter = stateFilters.types.selected
+        let activeFilter = props.types.selected
 
         Promise.all([...activeFilter.map(urlActive => axios(urlActive))])
             .then(results => {
@@ -155,23 +37,12 @@ export const Filter = () => {
                     .map(result => result.data.pokemon)
                     .map(arrayItems => arrayItems.map(i => Number(i.pokemon.url.split("/")[6])))
 
-                setStateFilters(prevState => {
-
-                    const newSelected = {
-                        ...prevState.selected,
-                        types: dataArray
-                    }
-
-                    return ({
-                        ...prevState,
-                        selected: newSelected
-                    })
-                })
+                setTypeSelect(dataArray)
             })
-    }, [stateFilters.types.selected])
+    }, [props.types.selected, setTypeSelect])
 
     useEffect(() => {
-        let activeFilter = stateFilters.colors.selected
+        let activeFilter = props.colors.selected
 
         Promise.all([...activeFilter.map(urlActive => axios(urlActive))])
             .then(results => {
@@ -179,24 +50,13 @@ export const Filter = () => {
                 const dataArray = results
                     .map(result => result.data.pokemon_species)
                     .map(arrayItems => arrayItems.map(i => Number(i.url.split("/")[6])))
+                setColorSelect(dataArray)
 
-                setStateFilters(prevState => {
-
-                    const newSelected = {
-                        ...prevState.selected,
-                        colors: dataArray
-                    }
-
-                    return ({
-                        ...prevState,
-                        selected: newSelected
-                    })
-                })
             })
-    }, [stateFilters.colors.selected])
+    }, [props.colors.selected, setColorSelect])
 
     useEffect(() => {
-        let activeFilter = stateFilters.genders.selected
+        let activeFilter = props.genders.selected
         if (activeFilter.length === 0) return
         console.log(activeFilter)
 
@@ -206,66 +66,92 @@ export const Filter = () => {
                     .map(arrayItems => arrayItems.pokemon_species)
                     .map(i => Number(i.url.split("/")[6]))
 
-                setStateFilters(prevState => {
-
-                    const newSelected = {
-                        ...prevState.selected,
-                        genders: dataArray
-                    }
-
-                    return ({
-                        ...prevState,
-                        selected: newSelected
-                    })
-                })
+                setGenderSelect(dataArray)
             })
-    }, [stateFilters.genders.selected])
-
-
-    useEffect(() => {
-        const allPokemons = JSON.parse(localStorage.getItem("pokemonsInStorage")).map(pokemon => pokemon.entry_number)
-
-        let typesPokemonsFiltered = findInterception(stateFilters.selected.types[0], stateFilters.selected.types.slice(1))
-        let colorsPokemonsFiltered = findInterception(stateFilters.selected.colors[0], stateFilters.selected.colors.slice(1))
-        let gendersPokemonsFiltered = stateFilters.selected.genders
-
-        if (typeof (typesPokemonsFiltered) == "undefined") {
-            typesPokemonsFiltered = allPokemons
-        }
-        if (typeof (colorsPokemonsFiltered) == "undefined") {
-            colorsPokemonsFiltered = allPokemons
-        }
-
-        if (stateFilters.selected.genders.length === 0) {
-            gendersPokemonsFiltered = allPokemons
-        }
-
-        const allPokemonsFiltered = [typesPokemonsFiltered, colorsPokemonsFiltered, gendersPokemonsFiltered]
-
-        console.log(findInterception(allPokemonsFiltered[0], allPokemonsFiltered.slice(1)))
-
-    }, [stateFilters.selected])
+    }, [props.genders.selected, setGenderSelect])
 
     return (
         <Fragment>
             <h5>Filter</h5>
             <div className="divider"></div>
             <TypeFilters
-                filter={stateFilters.types.types}
-                show={stateFilters.types.showMore}
+                filter={props.types.types}
+                show={props.types.showMore}
                 ClickShow={clickMoreOrLess}
                 handlerClick={addOrDeleteTypesHandler}
             />
             <div className="divider"></div>
             <ColorFilter
-                filter={stateFilters.colors.types}
+                filter={props.colors.types}
                 handlerClick={addOrDeleteColorHandler}
             />
             <div className="divider"></div>
             <GenderFilter
-                filter={stateFilters.genders.types}
-                handlerPick={gedersHandler}
+                filter={props.genders.types}
+                handlerPick={gendersHandler}
             />
         </Fragment>
     )
 }
+
+const mapStateToProps = props => ({
+    props: props
+})
+
+const mapDispatchToProps = dispatch => ({
+    initUseEffect(newState) {
+        dispatch({
+            type: "init",
+            newState
+        })
+    },
+    clickMoreOrLess() {
+        dispatch({
+            type: "clickMoreOrLess"
+        })
+    },
+    addOrDeleteTypesHandler(url, action) {
+        dispatch({
+            type: "addOrDeleteTypesHandler",
+            url,
+            action
+        })
+    },
+    addOrDeleteColorHandler(url, action) {
+        dispatch({
+            type: "addOrDeleteColorHandler",
+            url,
+            action
+        })
+    },
+    gendersHandler(url) {
+        dispatch({
+            type: "gendersHandler",
+            url,
+        })
+    },
+
+    setTypeSelect(dataArray) {
+        dispatch({
+            type: "setTypeSelect",
+            dataArray
+        })
+    },
+    setColorSelect(dataArray) {
+        dispatch({
+            type: "setColorSelect",
+            dataArray
+        })
+    },
+
+    setGenderSelect(dataArray) {
+        dispatch({
+            type: "setGenderSelect",
+            dataArray
+        })
+    }
+
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter)

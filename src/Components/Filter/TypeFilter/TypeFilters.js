@@ -22,7 +22,9 @@ export const TypeFilters = props => {
             <div className="row">
                 {boxFilter}
             </div>
-            <p style={{ cursor: "pointer" }} onClick={() => { props.ClickShow() }}>{pContent}</p>
+            <p style={{ cursor: "pointer" }} onClick={() => { props.ClickShow() }}>
+                {pContent}
+            </p>
         </Fragment>
     )
 }

@@ -3,7 +3,6 @@ import { capitalize } from '../../../../lib/Capitalize'
 import { Card } from "./Card/Cards"
 
 export const Cards = (props) => {
-
     const cards = props.pokemons.map(pokemon => (
         <Card
             id={pokemon.entry_number}
