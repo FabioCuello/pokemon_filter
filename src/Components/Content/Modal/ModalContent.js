@@ -196,7 +196,7 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
                     <Evolution pokemonEvolution={props.modal.detail.evolution} />
                 </div>
                 <div className="modal-footer">
-                    <a href="#a" className="modal-close waves-effect waves-green btn-flat">Cerrar</a>
+                    <a href="#a" className="modal-close waves-effect waves-light btn">Cerrar</a>
                 </div>
             </div>
         </Fragment>

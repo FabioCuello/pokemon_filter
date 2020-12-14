@@ -5,6 +5,7 @@ import { Cards } from "./Contents/Cards/Cards"
 import { Paragraph } from './Contents/Paragraph/Paragraph';
 import 'materialize-css';
 import Modal from './Modal/ModalContent';
+import "./Content.css"
 
 
 
@@ -44,7 +45,14 @@ const Content = ({ props, initContent, handlerMoreContent, changeFilter, handler
 
             <Cards pokemons={props.pokemons.list} click={handlerPickPokemon} />
 
-            {props.buttonOn ? <button onClick={() => { handlerMoreContent() }} >Load More</button> : null}
+            <div className="row">
+
+                <div className="col offset-s3">
+                    {props.buttonOn ? <button className="offset-s6 waves-effect waves-light btn" onClick={() => { handlerMoreContent() }} >Load More</button> : null}
+
+                </div>
+
+            </div>
         </Fragment>
     )
 }

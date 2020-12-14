@@ -13,10 +13,10 @@ function App() {
         <Navbar />
         <div className="container">
           <div className="row">
-            <div className="col s3">
+            <div className="col xl3 l3 m12 s12">
               <Filter />
             </div>
-            <div className="col s8 offset-s1">
+            <div className="col s12 m12 xl8 l8 offset-l1 offset-xl1">
               <Content />
             </div>
           </div>

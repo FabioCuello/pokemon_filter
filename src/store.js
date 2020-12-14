@@ -50,6 +50,9 @@ const initialState = {
     }
 }
 
+
+// TODO: Organize
+
 const reducer = (state = initialState, action) => {
     if (action.type === "init") {
         return ({
