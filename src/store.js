@@ -33,7 +33,19 @@ const initialState = {
     },
     modal: {
         selectedId: 0,
-        detail: {}
+        detail: {
+            name: "",
+            id: 0,
+            color: "",
+            height: "",
+            weight: "",
+            category: "",
+            habitat: "",
+            types: "",
+            description: "",
+            evolution: [],
+            gender: ""
+        }
     }
 }
 
@@ -201,7 +213,6 @@ const reducer = (state = initialState, action) => {
             state.selected.input
         )
 
-
         if (typeof (typesPokemonsFiltered) == "undefined") {
             typesPokemonsFiltered = allPokemonsId
         }
@@ -223,6 +234,7 @@ const reducer = (state = initialState, action) => {
         if (allPokemonsWithNoFilter.length <= 6) {
             newButtonState = false
         }
+
         return ({
             ...state,
             pokemons: {
@@ -383,17 +395,9 @@ const reducer = (state = initialState, action) => {
 
 
     }
-    console.log("sd")
 
 
     return state
 
 }
-
-
-
-// disparar el id y un useEfecr que esté pendiente, haces el proceso ahí y envias el resultado al store.
-// al final otro use effect que esté pendiente del store que cambiaste y disparar el modal
-
-
 export default createStore(reducer, composeWithDevTools())

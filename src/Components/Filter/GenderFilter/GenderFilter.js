@@ -17,6 +17,11 @@ export const GenderFilter = (props) => {
         <Fragment>
             <p>Gender: </p>
             <div className="row">
+                <Genders
+                    handlerPick={props.handlerPick}
+                    name={"All"}
+                    url={"none"}
+                />
                 {genders}
             </div>
         </Fragment>

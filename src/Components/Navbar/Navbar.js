@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Logo } from "./Logo/Logo"
 import "./Navbar.css"
@@ -7,6 +7,8 @@ import "./Navbar.css"
 
 const Navbar = ({ props, changeInput, filterInput, changeFilter }) => {
 
+    const isFirstRun__1 = useRef(true)
+
     const style = {
         position: "relative",
         margin: "1rem 5rem 2.5rem"
@@ -14,6 +16,10 @@ const Navbar = ({ props, changeInput, filterInput, changeFilter }) => {
 
 
     useEffect(() => {
+        if (isFirstRun__1.current) {
+            isFirstRun__1.current = false
+            return
+        }
         const timer = setTimeout(() => {
 
 

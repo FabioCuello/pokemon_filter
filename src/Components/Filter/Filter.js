@@ -76,7 +76,10 @@ const Filter = ({ props, initUseEffect, clickMoreOrLess, addOrDeleteTypesHandler
         }
         let activeFilter = props.genders.selected
         if (activeFilter.length === 0) return
-        console.log(activeFilter)
+
+        if (activeFilter === "none") {
+            return setGenderSelect([])
+        }
 
         axios.get(activeFilter)
             .then(results => {

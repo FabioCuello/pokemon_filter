@@ -8,6 +8,7 @@ export const Genders = (props) => {
                 <label>
                     <input className="with-gap" name="group1" type="radio" onChange={(event) => {
                         if (event.target.checked) {
+
                             props.handlerPick(props.url)
                         }
 

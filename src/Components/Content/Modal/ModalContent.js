@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useRef } from "react"
 import { connect } from "react-redux"
 import $ from "jquery"
 import axios from "axios"
+import { Evolution } from "./Evolution/Evolution"
 
 const Modal = ({ props, handlerDetailsPokemon }) => {
     const isFirstRun_2 = useRef(true)
@@ -28,7 +29,9 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
                 for (digits; digits < 3; digits++) {
                     idArray.unshift("0")
                 }
+
                 let id = idArray.join("")
+                let pokemonHabitat = dataPokemonSpecies.habitat == null ? "Not Found" : dataPokemonSpecies.habitat.name
 
                 const descriptionPokemon = {
                     name: dataPokemonSpecies.name,
@@ -37,15 +40,14 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
                     height: dataPokemon.height,
                     weight: dataPokemon.weight,
                     category: dataPokemonSpecies.egg_groups.map(element => element.name).join(", "),
-                    habitat: dataPokemonSpecies.habitat.name,
-                    types: dataPokemon.types.map(element => element.type.name),
+                    habitat: pokemonHabitat,
+                    types: dataPokemon.types.map(element => element.type.name).join(", "),
                     description: dataPokemonSpecies.flavor_text_entries[0].flavor_text,
                 }
 
                 const gendersUrl1 = `https://pokeapi.co/api/v2/gender/1/`
                 const gendersUrl2 = `https://pokeapi.co/api/v2/gender/2/`
                 const gendersUrl3 = `https://pokeapi.co/api/v2/gender/3/`
-
 
                 Promise.all([axios.get(gendersUrl1), axios.get(gendersUrl2), axios.get(gendersUrl3)])
                     .then(response => {
@@ -74,7 +76,37 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
 
                         descriptionPokemon.gender = gender.join(", ")
 
-                        handlerDetailsPokemon(descriptionPokemon)
+                        axios.get(dataPokemonSpecies.evolution_chain.url)
+                            .then(response => {
+                                const { data: dataEvolutionChain } = response
+
+                                const pokemonEvolution = []
+
+                                try {
+                                    pokemonEvolution.push({
+                                        name: dataEvolutionChain.chain.species.name,
+                                        url: Number(dataEvolutionChain.chain.species.url.split("/")[6])
+                                    })
+                                } catch (error) { }
+
+                                try {
+                                    pokemonEvolution.push({
+                                        name: dataEvolutionChain.chain.evolves_to[0].species.name,
+                                        url: Number(dataEvolutionChain.chain.evolves_to[0].species.url.split("/")[6])
+                                    })
+                                } catch (error) { }
+
+                                try {
+                                    pokemonEvolution.push({
+                                        name: dataEvolutionChain.chain.evolves_to[0].evolves_to[0].species.name,
+                                        url: Number(dataEvolutionChain.chain.evolves_to[0].evolves_to[0].species.url.split("/")[6])
+                                    })
+                                } catch (error) { }
+
+
+                                descriptionPokemon.evolution = pokemonEvolution
+                                handlerDetailsPokemon(descriptionPokemon)
+                            })
                     })
             })
 
@@ -90,10 +122,11 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
 
     }, [props.modal.detail])
 
+
     return (
         <Fragment>
 
-            <a id="trigerModal" className="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+            <a style={{ display: "none" }} id="trigerModal" className="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
 
             <div id="modal1" className="modal">
                 <div className="modal-content">
@@ -121,11 +154,11 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
                                     <tbody>
                                         <tr>
                                             <td>Height</td>
-                                            <td>{props.modal.detail.height} Kg </td>
+                                            <td>{props.modal.detail.height} m </td>
                                         </tr>
                                         <tr>
                                             <td>Weight</td>
-                                            <td>{props.modal.detail.weight} m</td>
+                                            <td>{props.modal.detail.weight} Kg</td>
                                         </tr>
                                         <tr>
                                             <td>Category</td>
@@ -146,17 +179,31 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
                                     </tbody>
                                 </table>
                             </div>
+                            <div className="row">
+                                <div className="col s12">
+                                    <h5>Types</h5>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col s6">
+                                    <p>{props.modal.detail.types}</p>
 
+                                </div>
+                                <div className="col s6">
+
+                                </div>
+                            </div>
                         </div>
 
                     </div>
+                    <hr />
 
-                    <div className="row">
-                        EVOLUTION
-                    </div>
+
+                    <Evolution pokemonEvolution={props.modal.detail.evolution} />
+
                 </div>
                 <div className="modal-footer">
-                    <a href="#!" className="modal-close waves-effect waves-green btn-flat">Agree</a>
+                    <a className="modal-close waves-effect waves-green btn-flat">Cerrar</a>
                 </div>
             </div>
         </Fragment>
