@@ -40,6 +40,7 @@ const Navbar = ({ props, changeInput, filterInput }) => {
             </div>
 
             <div className="searchBox" >
+                <i className="material-icons">search</i>
                 <input type="text" value={props.searchBox.input} onChange={changeInput} ></input>
             </div>
         </div>

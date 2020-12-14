@@ -15,7 +15,7 @@ export const GenderFilter = (props) => {
 
     return (
         <Fragment>
-            <p>Gender: </p>
+            <p>Gender </p>
             <div className="row">
                 <Genders
                     handlerPick={props.handlerPick}
