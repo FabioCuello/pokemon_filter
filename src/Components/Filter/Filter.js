@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { TypeFilters } from "./TypeFilter/TypeFilters"
 import { ColorFilter } from "./ColorFilter/ColorFilter"
 import { GenderFilter } from "./GenderFilter/GenderFilter"
-import { findInterception } from '../../lib/repeatedValuesArrays'
 
 import axios from "axios"
 
@@ -171,7 +170,6 @@ const mapDispatchToProps = dispatch => ({
             dataArray
         })
     }
-
 })
 
 

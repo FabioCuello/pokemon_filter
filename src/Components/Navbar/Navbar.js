@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { Logo } from "./Logo/Logo"
 import "./Navbar.css"
 
 
 
-const Navbar = ({ props, changeInput, filterInput, changeFilter }) => {
+const Navbar = ({ props, changeInput, filterInput }) => {
 
     const isFirstRun__1 = useRef(true)
 
@@ -64,11 +64,6 @@ const mapDispatchToProps = dispatch => ({
         })
     },
 
-    changeFilter() {
-        dispatch({
-            type: "changeFilter"
-        })
-    }
 })
 
 

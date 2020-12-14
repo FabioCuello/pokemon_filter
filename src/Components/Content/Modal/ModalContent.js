@@ -118,10 +118,11 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
             return
         }
 
+
+
         $("#trigerModal")[0].click()
 
-    }, [props.modal.detail])
-
+    }, [props.modal.detail, props.modal.reShow])
 
     return (
         <Fragment>
@@ -195,7 +196,7 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
                     <Evolution pokemonEvolution={props.modal.detail.evolution} />
                 </div>
                 <div className="modal-footer">
-                    <a className="modal-close waves-effect waves-green btn-flat">Cerrar</a>
+                    <a href="#a" className="modal-close waves-effect waves-green btn-flat">Cerrar</a>
                 </div>
             </div>
         </Fragment>

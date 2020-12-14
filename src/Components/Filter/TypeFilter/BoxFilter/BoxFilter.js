@@ -9,11 +9,8 @@ export const BoxFilter = (props) => {
                     <label>
                         <input type="checkbox" onChange={(event) => {
                             if (event.target.checked) {
-                                console.log("add")
                                 return props.handlerClick(props.url, "add")
                             }
-
-                            console.log("remove")
                             return props.handlerClick(props.url, "remove")
                         }} />
                         <span>{props.name}</span>

@@ -35,7 +35,7 @@ const initialState = {
         selectedId: 0,
         detail: {
             name: "",
-            id: 0,
+            id: "001",
             color: "",
             height: "",
             weight: "",
@@ -45,7 +45,8 @@ const initialState = {
             description: "",
             evolution: [],
             gender: ""
-        }
+        },
+        reShow: false
     }
 }
 
@@ -372,11 +373,22 @@ const reducer = (state = initialState, action) => {
     if (action.type === "handlerPickPokemon") {
         const newmodal = action.id
 
+        if (state.modal.selectedId === newmodal) {
+            return ({
+                ...state,
+                modal: {
+                    ...state.modal,
+                    reShow: !state.modal.reShow
+                }
+            })
+        }
+
         return ({
             ...state,
             modal: {
                 ...state.modal,
-                selectedId: newmodal
+                selectedId: newmodal,
+                reShow: !state.modal.reShow
             }
         })
     }
@@ -395,7 +407,6 @@ const reducer = (state = initialState, action) => {
 
 
     }
-
 
     return state
 
