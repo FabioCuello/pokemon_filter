@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { findInterception } from './lib/repeatedValuesArrays';
@@ -32,8 +31,9 @@ const initialState = {
         genders: [],
         input: []
     },
-    modalInfo: {
-        x: ""
+    modal: {
+        selectedId: 0,
+        detail: {}
     }
 }
 
@@ -357,18 +357,33 @@ const reducer = (state = initialState, action) => {
         })
     }
 
-    if (action.type === "updatePokemonsModals") {
+    if (action.type === "handlerPickPokemon") {
         const newmodal = action.id
 
         return ({
             ...state,
-            modalInfo: {
-                x: newmodal
+            modal: {
+                ...state.modal,
+                selectedId: newmodal
+            }
+        })
+    }
+
+    if (action.type === "handlerDetailsPokemon") {
+        const newDescriptionPokemon = action.descriptionPokemon
+
+
+        return ({
+            ...state,
+            modal: {
+                ...state.modal,
+                detail: newDescriptionPokemon
             }
         })
 
-    }
 
+    }
+    console.log("sd")
 
 
     return state
@@ -377,7 +392,8 @@ const reducer = (state = initialState, action) => {
 
 
 
-
+// disparar el id y un useEfecr que esté pendiente, haces el proceso ahí y envias el resultado al store.
+// al final otro use effect que esté pendiente del store que cambiaste y disparar el modal
 
 
 export default createStore(reducer, composeWithDevTools())

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useReducer, useRef } from 'react'
+import React, { Fragment, useEffect, useRef } from 'react'
 import { connect } from "react-redux";
 import axios from "axios"
 import { Cards } from "./Contents/Cards/Cards"
@@ -8,7 +8,7 @@ import Modal from './Modal/ModalContent';
 
 
 
-const Content = ({ props, initContent, handlerMoreContent, changeFilter, handlerClickPokemon, updatePokemonsModals }) => {
+const Content = ({ props, initContent, handlerMoreContent, changeFilter, handlerPickPokemon }) => {
 
     const isFirstRun_1 = useRef(true)
 
@@ -42,7 +42,7 @@ const Content = ({ props, initContent, handlerMoreContent, changeFilter, handler
             />
             <Modal />
 
-            <Cards pokemons={props.pokemons.list} click={updatePokemonsModals} />
+            <Cards pokemons={props.pokemons.list} click={handlerPickPokemon} />
 
             {props.buttonOn ? <button onClick={() => { handlerMoreContent() }} >Load More</button> : null}
         </Fragment>
@@ -70,9 +70,9 @@ const mapDispatchToProps = dispatch => ({
         })
     }
     ,
-    updatePokemonsModals(id) {
+    handlerPickPokemon(id) {
         dispatch({
-            type: "updatePokemonsModals",
+            type: "handlerPickPokemon",
             id
 
         })

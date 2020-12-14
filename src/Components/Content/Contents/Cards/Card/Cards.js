@@ -1,7 +1,5 @@
-import { Button } from 'react-materialize';
 import React from 'react'
 import "./Cards.css"
-import { Modalcontent } from '../../../Modal/ModalContent';
 
 export const Card = (props) => {
 
