@@ -14,9 +14,9 @@ export const Evolution = (props) => {
 
         return (
 
-            <div className="col s4">
+            <div key={el.url} className="col s4">
                 <div className="row">
-                    <img style={{ maxWidth: "100%" }} src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${id}.png`} alt="none" />
+                    <img style={{ maxWidth: "50%" }} src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${id}.png`} alt="none" />
                 </div>
                 <div className="row" >
                     <p>{el.name} </p>
@@ -26,7 +26,7 @@ export const Evolution = (props) => {
     })
 
     return (
-        <Fragment>
+        <Fragment >
             <div className="row">
                 <h5>Evolution</h5>
             </div>

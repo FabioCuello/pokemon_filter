@@ -127,7 +127,6 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
         <Fragment>
 
             <a style={{ display: "none" }} id="trigerModal" className="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
-
             <div id="modal1" className="modal">
                 <div className="modal-content">
                     <div className="row">
@@ -135,7 +134,6 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
                             <div className="card-image">
                                 <img style={{ maxWidth: "100%" }} src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${props.modal.detail.id}.png`} alt="none" />
                             </div>
-
                         </div>
                         <div className="col s6">
                             <div className="row">
@@ -187,20 +185,14 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
                             <div className="row">
                                 <div className="col s6">
                                     <p>{props.modal.detail.types}</p>
-
                                 </div>
                                 <div className="col s6">
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <hr />
-
-
                     <Evolution pokemonEvolution={props.modal.detail.evolution} />
-
                 </div>
                 <div className="modal-footer">
                     <a className="modal-close waves-effect waves-green btn-flat">Cerrar</a>

@@ -209,7 +209,7 @@ const reducer = (state = initialState, action) => {
         let gendersPokemonsFiltered = state.selected.genders.length === 0 ? allPokemonsId : (
             state.selected.genders
         )
-        let inputPokemonsFilteres = state.selected.input.length === 0 && state.searchBox.length === 0 ? allPokemonsId : (
+        let inputPokemonsFilteres = state.selected.input.length === 0 && state.searchBox.input === "" ? allPokemonsId : (
             state.selected.input
         )
 
