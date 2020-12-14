@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { findInterception } from './lib/repeatedValuesArrays';
@@ -30,7 +31,9 @@ const initialState = {
         colors: [],
         genders: [],
         input: []
-
+    },
+    modalInfo: {
+        x: ""
     }
 }
 
@@ -194,7 +197,7 @@ const reducer = (state = initialState, action) => {
         let gendersPokemonsFiltered = state.selected.genders.length === 0 ? allPokemonsId : (
             state.selected.genders
         )
-        let inputPokemonsFilteres = state.selected.input.length === 0 ? allPokemonsId : (
+        let inputPokemonsFilteres = state.selected.input.length === 0 && state.searchBox.length === 0 ? allPokemonsId : (
             state.selected.input
         )
 
@@ -297,7 +300,7 @@ const reducer = (state = initialState, action) => {
     }
 
     if (action.type === "filterInput") {
-        const input = state.searchBox.input
+        let input = state.searchBox.input
         const allPokemons = JSON.parse(localStorage.getItem("pokemonsInStorage"))
 
         if (!!Number(input)) {
@@ -331,6 +334,9 @@ const reducer = (state = initialState, action) => {
             })
         }
 
+
+        input = input.split("").map(letter => letter.toLowerCase()).join("")
+
         const allPokemonsName = allPokemons.map(pokemons => pokemons.pokemon_species.name)
 
         const pokemonsFilteredName = allPokemonsName.filter(name => name.includes(input))
@@ -350,6 +356,20 @@ const reducer = (state = initialState, action) => {
             selected: newSelected
         })
     }
+
+    if (action.type === "updatePokemonsModals") {
+        const newmodal = action.id
+
+        return ({
+            ...state,
+            modalInfo: {
+                x: newmodal
+            }
+        })
+
+    }
+
+
 
     return state
 

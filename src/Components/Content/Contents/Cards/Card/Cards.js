@@ -1,7 +1,10 @@
+import { Button } from 'react-materialize';
 import React from 'react'
 import "./Cards.css"
+import { Modalcontent } from '../../../Modal/ModalContent';
 
 export const Card = (props) => {
+
     let idArray = props.id.toString().split("")
     let digits = idArray.length
 
@@ -10,8 +13,10 @@ export const Card = (props) => {
     }
     let id = idArray.join("")
 
+
     return (
-        <div className="card col s3 s">
+        <div onClick={() => { props.click(props.id) }} className="card col s3 s">
+
             <div className="card-image">
                 <img src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${id}.png`} alt="none" />
             </div>

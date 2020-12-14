@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { TypeFilters } from "./TypeFilter/TypeFilters"
 import { ColorFilter } from "./ColorFilter/ColorFilter"
@@ -8,6 +8,11 @@ import { findInterception } from '../../lib/repeatedValuesArrays'
 import axios from "axios"
 
 const Filter = ({ props, initUseEffect, clickMoreOrLess, addOrDeleteTypesHandler, addOrDeleteColorHandler, gendersHandler, setTypeSelect, setColorSelect, setGenderSelect }) => {
+    const isFirstRun1 = useRef(true)
+    const isFirstRun2 = useRef(true)
+    const isFirstRun3 = useRef(true)
+
+
     useEffect(() => {
 
         const getFilterTypes = axios.get("https://pokeapi.co/api/v2/type")
@@ -28,6 +33,11 @@ const Filter = ({ props, initUseEffect, clickMoreOrLess, addOrDeleteTypesHandler
     }, [])
 
     useEffect(() => {
+        if (isFirstRun1.current) {
+            isFirstRun1.current = false
+            return
+        }
+
         let activeFilter = props.types.selected
 
         Promise.all([...activeFilter.map(urlActive => axios(urlActive))])
@@ -42,6 +52,10 @@ const Filter = ({ props, initUseEffect, clickMoreOrLess, addOrDeleteTypesHandler
     }, [props.types.selected, setTypeSelect])
 
     useEffect(() => {
+        if (isFirstRun2.current) {
+            isFirstRun2.current = false
+            return
+        }
         let activeFilter = props.colors.selected
 
         Promise.all([...activeFilter.map(urlActive => axios(urlActive))])
@@ -56,6 +70,10 @@ const Filter = ({ props, initUseEffect, clickMoreOrLess, addOrDeleteTypesHandler
     }, [props.colors.selected, setColorSelect])
 
     useEffect(() => {
+        if (isFirstRun3.current) {
+            isFirstRun3.current = false
+            return
+        }
         let activeFilter = props.genders.selected
         if (activeFilter.length === 0) return
         console.log(activeFilter)

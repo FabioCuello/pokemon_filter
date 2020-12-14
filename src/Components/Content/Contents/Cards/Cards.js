@@ -5,6 +5,7 @@ import { Card } from "./Card/Cards"
 export const Cards = (props) => {
     const cards = props.pokemons.map(pokemon => (
         <Card
+            click={props.click}
             id={pokemon.entry_number}
             key={pokemon.entry_number}
             name={capitalize(pokemon.pokemon_species.name)}
