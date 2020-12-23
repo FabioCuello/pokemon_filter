@@ -1,58 +1,12 @@
-import { createStore } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-import { findInterception } from "./lib/repeatedValuesArrays";
-import * as actionTypes from "./store/actions";
+import * as actionTypes from "../actions.js";
 
-const initialState = {
+const contentInitialState = {
   pokemons: {
     list: [],
     count: 6,
   },
-  buttonOn: true,
-  types: {
-    types: [],
-    showMore: false,
-    selected: [],
-  },
-  colors: {
-    types: [],
-    selected: [],
-  },
-  genders: {
-    types: [],
-    selected: [],
-  },
-  searchBox: {
-    input: "",
-  },
-  selected: {
-    types: [],
-    colors: [],
-    genders: [],
-    input: [],
-  },
-  modal: {
-    selectedId: 0,
-    detail: {
-      name: "",
-      id: "001",
-      color: "",
-      height: "",
-      weight: "",
-      category: "",
-      habitat: "",
-      types: "",
-      description: "",
-      evolution: [],
-      gender: "",
-    },
-    reShow: false,
-  },
 };
-
-// TODO: Organize
-
-const reducer = (state = initialState, action) => {
+const reducer = (state = contentInitialState, action) => {
   switch (action.type) {
     case actionTypes.initUseEffect: {
       return {
@@ -458,5 +412,3 @@ const reducer = (state = initialState, action) => {
     }
   }
 };
-
-export default createStore(reducer, composeWithDevTools());
