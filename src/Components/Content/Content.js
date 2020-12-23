@@ -9,10 +9,11 @@ import "./Content.css";
 import * as actionTypes from "../../store/actions.js";
 
 const Content = ({
-  props,
+  contentState,
+  filterState,
   initContent,
   handlerMoreContent,
-  changeFilter,
+  changeContent,
   handlerPickPokemon,
 }) => {
   const isFirstRun_1 = useRef(true);
@@ -24,7 +25,7 @@ const Content = ({
 
       initContent(pokemonList);
     });
-  }, []);
+  }, [initContent]);
 
   useEffect(() => {
     if (isFirstRun_1.current) {
@@ -32,23 +33,23 @@ const Content = ({
       return;
     }
 
-    changeFilter();
-  }, [props.selected]);
+    changeContent(filterState.selected, filterState.searchBox);
+  }, [filterState.selected, filterState.searchBox, changeContent]);
 
   return (
     <Fragment>
-      <Paragraph pokemons={props.pokemons.list} />
+      <Paragraph pokemons={contentState.pokemons.list} />
       <Modal />
 
-      <Cards pokemons={props.pokemons.list} click={handlerPickPokemon} />
+      <Cards pokemons={contentState.pokemons.list} click={handlerPickPokemon} />
 
       <div className="row">
         <div className="col offset-s3">
-          {props.buttonOn ? (
+          {contentState.buttonOn ? (
             <button
               className="offset-s6 waves-effect waves-light btn"
               onClick={() => {
-                handlerMoreContent();
+                handlerMoreContent(filterState.selected);
               }}
             >
               Load More
@@ -59,17 +60,26 @@ const Content = ({
     </Fragment>
   );
 };
-const mapStateToProps = (props) => ({
-  props: props,
+const mapStateToProps = (state) => ({
+  contentState: state.content,
+  filterState: state.filters,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     initContent: (pokemonList) =>
       dispatch({ type: actionTypes.initContent, pokemonList }),
-    handlerMoreContent: () =>
-      dispatch({ type: actionTypes.handlerMoreContent }),
-    changeFilter: () => dispatch({ type: actionTypes.changeFilter }),
+    handlerMoreContent: (selected) =>
+      dispatch({
+        type: actionTypes.handlerMoreContent,
+        stateSelected: selected,
+      }),
+    changeContent: (selected, searchBox) =>
+      dispatch({
+        type: actionTypes.changeContent,
+        stateSelected: selected,
+        stateSearchbox: searchBox,
+      }),
     handlerPickPokemon: (id) =>
       dispatch({ type: actionTypes.handlerPickPokemon, id }),
   };

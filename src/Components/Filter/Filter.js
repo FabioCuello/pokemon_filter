@@ -40,7 +40,7 @@ const Filter = ({
         initUseEffect(newState);
       }
     );
-  }, []);
+  }, [initUseEffect]);
 
   useEffect(() => {
     if (isFirstRun1.current) {
@@ -125,8 +125,8 @@ const Filter = ({
   );
 };
 
-const mapStateToProps = (props) => ({
-  props: props,
+const mapStateToProps = (state) => ({
+  props: state.filters,
 });
 
 const mapDispatchToProps = (dispatch) => {

@@ -243,8 +243,8 @@ const Modal = ({ props, handlerDetailsPokemon }) => {
   );
 };
 
-const mapStateToProps = (props) => ({
-  props: props,
+const mapStateToProps = (state) => ({
+  props: state.modal,
 });
 
 const mapDispatchToProps = (dispatch) => {

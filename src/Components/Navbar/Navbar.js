@@ -45,8 +45,8 @@ const Navbar = ({ props, changeInput, filterInput }) => {
   );
 };
 
-const mapStateToProps = (props) => ({
-  props: props,
+const mapStateToProps = (state) => ({
+  props: state.filters,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -57,4 +57,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
-
