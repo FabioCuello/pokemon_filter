@@ -1,19 +1,6 @@
-import * as actionTypes from "../actions.js";
+import * as actionTypes from "../actions/actionsTypes";
 
 const filtersInitialState = {
-  types: {
-    types: [],
-    showMore: false,
-    selected: [],
-  },
-  colors: {
-    types: [],
-    selected: [],
-  },
-  genders: {
-    types: [],
-    selected: [],
-  },
   searchBox: {
     input: "",
   },
@@ -27,144 +14,32 @@ const filtersInitialState = {
 
 export const filtersReducer = (state = filtersInitialState, action) => {
   switch (action.type) {
-    case actionTypes.initUseEffect: {
-      return {
-        ...state,
-        types: {
-          ...state.types,
-          types: action.newState.types.slice(0, 9),
-          showMore: state.types.showMore,
-        },
-        colors: {
-          ...state.colors,
-          types: action.newState.colors,
-        },
-        genders: {
-          ...state.genders,
-          types: action.newState.genders,
-        },
-      };
-    }
-    case actionTypes.clickMoreOrLess: {
-      const newStateFilter = {
-        ...state.types,
-        showMore: !state.types.showMore,
-      };
-
-      if (!state.types.showMore) {
-        newStateFilter.types = JSON.parse(
-          localStorage.getItem("typesInStorage")
-        );
-      } else {
-        newStateFilter.types = JSON.parse(
-          localStorage.getItem("typesInStorage")
-        ).slice(0, 9);
-      }
-      return {
-        ...state,
-        types: newStateFilter,
-      };
-    }
-
-    case actionTypes.addOrDeleteTypesHandler: {
-      const {
-        types: { selected },
-      } = state;
-
-      let newSelected;
-
-      if (action.action === "add") {
-        newSelected = [...selected, action.url];
-      }
-
-      if (action.action === "remove") {
-        newSelected = selected.filter(
-          (urlActive) => !action.url.includes(urlActive)
-        );
-      }
-
-      const newTypes = {
-        ...state.types,
-        selected: newSelected,
-      };
-      return {
-        ...state,
-        types: newTypes,
-      };
-    }
-
-    case actionTypes.addOrDeleteColorHandler: {
-      const {
-        colors: { selected },
-      } = state;
-      let newSelected;
-
-      if (action.action === "add") {
-        newSelected = [...selected, action.url];
-      }
-      if (action.action === "remove") {
-        newSelected = selected.filter(
-          (urlActive) => !action.url.includes(urlActive)
-        );
-      }
-
-      const newTypes = {
-        ...state.colors,
-        selected: newSelected,
-      };
-      return {
-        ...state,
-        colors: newTypes,
-      };
-    }
-
-    case actionTypes.gendersHandler: {
-      let newSelected = action.url;
-
-      const newGender = {
-        ...state.genders,
-        selected: newSelected,
-      };
-
-      return {
-        ...state,
-        genders: newGender,
-      };
-    }
-
     case actionTypes.setTypeSelect: {
-      const newSelected = {
-        ...state.selected,
-        types: action.dataArray,
-      };
-
       return {
         ...state,
-        selected: newSelected,
+        selected: {
+          ...state.selected,
+          types: action.dataArray,
+        },
       };
     }
-
     case actionTypes.setColorSelect: {
-      const newSelected = {
-        ...state.selected,
-        colors: action.dataArray,
-      };
-
       return {
         ...state,
-        selected: newSelected,
+        selected: {
+          ...state.selected,
+          colors: action.dataArray,
+        },
       };
     }
 
     case actionTypes.setGenderSelect: {
-      const newSelected = {
-        ...state.selected,
-        genders: action.dataArray,
-      };
-
       return {
         ...state,
-        selected: newSelected,
+        selected: {
+          ...state.selected,
+          genders: action.dataArray,
+        },
       };
     }
     case actionTypes.changeInput: {

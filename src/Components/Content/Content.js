@@ -1,12 +1,15 @@
 import React, { Fragment, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import { Cards } from "./Contents/Cards/Cards";
-import { Paragraph } from "./Contents/Paragraph/Paragraph";
+import Cards from "./Cards/Cards";
+import { Paragraph } from "./Paragraph/Paragraph";
 import "materialize-css";
-import Modal from "./Modal/ModalContent";
-import "./Content.css";
-import * as actionTypes from "../../store/actions.js";
+import {
+  initContent,
+  handlerMoreContent,
+  changeContent,
+  handlerPickPokemon,
+} from "../../store/actions/content";
 
 const Content = ({
   contentState,
@@ -38,8 +41,8 @@ const Content = ({
 
   return (
     <Fragment>
+      {console.log("Rendering Component")}
       <Paragraph pokemons={contentState.pokemons.list} />
-      <Modal />
 
       <Cards pokemons={contentState.pokemons.list} click={handlerPickPokemon} />
 
@@ -67,21 +70,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    initContent: (pokemonList) =>
-      dispatch({ type: actionTypes.initContent, pokemonList }),
-    handlerMoreContent: (selected) =>
-      dispatch({
-        type: actionTypes.handlerMoreContent,
-        stateSelected: selected,
-      }),
+    initContent: (pokemonList) => dispatch(initContent(pokemonList)),
+    handlerMoreContent: (selected) => dispatch(handlerMoreContent(selected)),
     changeContent: (selected, searchBox) =>
-      dispatch({
-        type: actionTypes.changeContent,
-        stateSelected: selected,
-        stateSearchbox: searchBox,
-      }),
-    handlerPickPokemon: (id) =>
-      dispatch({ type: actionTypes.handlerPickPokemon, id }),
+      dispatch(changeContent(selected, searchBox)),
+    handlerPickPokemon: (id) => dispatch(handlerPickPokemon(id)),
   };
 };
 

@@ -1,4 +1,4 @@
-import * as actionTypes from "../actions.js";
+import * as actionTypes from "../actions/actionsTypes";
 import { findInterception } from "../../lib/repeatedValuesArrays";
 
 const contentInitialState = {
@@ -7,23 +7,6 @@ const contentInitialState = {
     count: 6,
   },
   buttonOn: true,
-  modal: {
-    selectedId: 0,
-    detail: {
-      name: "",
-      id: "001",
-      color: "",
-      height: "",
-      weight: "",
-      category: "",
-      habitat: "",
-      types: "",
-      description: "",
-      evolution: [],
-      gender: "",
-    },
-    reShow: false,
-  },
 };
 
 export const contentReducer = (state = contentInitialState, action) => {

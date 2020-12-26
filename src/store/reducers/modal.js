@@ -1,57 +1,14 @@
-import * as actionTypes from "../actions.js";
+import * as actionTypes from "../actions/actionsTypes";
 
 const modalInitialState = {
-  modal: {
-    reShow: false,
-    selectedId: 0,
-    detail: {
-      name: "",
-      id: "001",
-      color: "",
-      height: "",
-      weight: "",
-      category: "",
-      habitat: "",
-      types: "",
-      description: "",
-      evolution: [],
-      gender: "",
-    },
-  },
+  selectedPokemonId: "1",
 };
 
 export const modalReducer = (state = modalInitialState, action) => {
   if (action.type === actionTypes.handlerPickPokemon) {
-    const newmodal = action.id;
-
-    if (state.modal.selectedId === newmodal) {
-      return {
-        ...state,
-        modal: {
-          ...state.modal,
-          reShow: !state.modal.reShow,
-        },
-      };
-    }
-
+    const newSelectedPokemonId = action.id;
     return {
-      ...state,
-      modal: {
-        ...state.modal,
-        selectedId: newmodal,
-        reShow: !state.modal.reShow,
-      },
-    };
-  }
-  if (action.type === actionTypes.handlerDetailsPokemon) {
-    const newDescriptionPokemon = action.descriptionPokemon;
-
-    return {
-      ...state,
-      modal: {
-        ...state.modal,
-        detail: newDescriptionPokemon,
-      },
+      selectedPokemonId: newSelectedPokemonId,
     };
   }
 

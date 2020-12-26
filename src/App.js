@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "./Components/Navbar/Navbar";
 import Filter from "./Components/Filter/Filter";
 import Content from "./Components/Content/Content";
+import PokemonModal from "./Components/ModalContent/ModalContent";
 import "./App.css";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <div className="col s12 m12 xl8 l8 offset-l1 offset-xl1">
             <Content />
           </div>
+          <PokemonModal />
         </div>
       </div>
     </div>

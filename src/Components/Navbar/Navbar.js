@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { Logo } from "./Logo/Logo";
-import * as actionTypes from "../../store/actions";
+import { changeInput, filterInput } from "../../store/actions/actionsTypes";
 
 const Navbar = ({ props, changeInput, filterInput }) => {
   const isFirstRun__1 = useRef(true);
@@ -21,7 +21,7 @@ const Navbar = ({ props, changeInput, filterInput }) => {
     return () => {
       clearTimeout(timer);
     };
-  }, [props.searchBox.input]);
+  }, [props.searchBox.input, filterInput]);
 
   return (
     <div style={style} className="row">
@@ -51,8 +51,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    changeInput: (input) => dispatch({ type: actionTypes.changeInput, input }),
-    filterInput: () => dispatch({ type: actionTypes.filterInput }),
+    changeInput: (input) => dispatch(changeInput(input)),
+    filterInput: () => dispatch(filterInput()),
   };
 };
 

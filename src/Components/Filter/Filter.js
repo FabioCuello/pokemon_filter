@@ -1,25 +1,35 @@
-import React, { Fragment, useEffect, useRef } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
+import { Modal } from "../Modal/Modal";
+import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import { TypeFilters } from "./TypeFilter/TypeFilters";
 import { ColorFilter } from "./ColorFilter/ColorFilter";
 import { GenderFilter } from "./GenderFilter/GenderFilter";
-import * as actionTypes from "../../store/actions.js";
-import axios from "axios";
-
-const Filter = ({
-  props,
-  initUseEffect,
-  clickMoreOrLess,
-  addOrDeleteTypesHandler,
-  addOrDeleteColorHandler,
-  gendersHandler,
+import {
   setTypeSelect,
   setColorSelect,
   setGenderSelect,
-}) => {
+} from "../../store/actions/index";
+import axios from "axios";
+
+const Filter = ({ setTypeSelect, setColorSelect, setGenderSelect }) => {
   const isFirstRun1 = useRef(true);
   const isFirstRun2 = useRef(true);
   const isFirstRun3 = useRef(true);
+
+  const [typesState, setTypesState] = useState({
+    types: [],
+    showMore: false,
+    selected: [],
+  });
+  const [colorsState, setColorsState] = useState({
+    types: [],
+    selected: [],
+  });
+  const [gendersState, setGendersState] = useState({
+    types: [],
+    selected: [],
+  });
 
   useEffect(() => {
     const getFilterTypes = axios.get("https://pokeapi.co/api/v2/type");
@@ -31,16 +41,31 @@ const Filter = ({
     Promise.all([getFilterTypes, getFilterColors, getFilterGenders]).then(
       (response) => {
         const [types, colors, genders] = response;
-
         const newState = {
           types: types.data.results,
           colors: colors.data.results,
           genders: genders.data.results,
         };
-        initUseEffect(newState);
+
+        localStorage.setItem("typesInStorage", JSON.stringify(newState.types));
+
+        ReactDOM.unstable_batchedUpdates(() => {
+          setTypesState((prevState) => ({
+            ...prevState,
+            types: newState.types.slice(0, 9),
+          }));
+          setColorsState((prevState) => ({
+            ...prevState,
+            types: newState.colors,
+          }));
+          setGendersState((prevState) => ({
+            ...prevState,
+            types: newState.genders,
+          }));
+        });
       }
     );
-  }, [initUseEffect]);
+  }, []);
 
   useEffect(() => {
     if (isFirstRun1.current) {
@@ -48,7 +73,7 @@ const Filter = ({
       return;
     }
 
-    let activeFilter = props.types.selected;
+    const { selected: activeFilter } = typesState;
 
     Promise.all([...activeFilter.map((urlActive) => axios(urlActive))]).then(
       (results) => {
@@ -62,14 +87,15 @@ const Filter = ({
         setTypeSelect(dataArray);
       }
     );
-  }, [props.types.selected, setTypeSelect]);
+  }, [typesState.selected]);
 
   useEffect(() => {
     if (isFirstRun2.current) {
       isFirstRun2.current = false;
       return;
     }
-    let activeFilter = props.colors.selected;
+
+    const { selected: activeFilter } = colorsState;
 
     Promise.all([...activeFilter.map((urlActive) => axios(urlActive))]).then(
       (results) => {
@@ -81,14 +107,16 @@ const Filter = ({
         setColorSelect(dataArray);
       }
     );
-  }, [props.colors.selected, setColorSelect]);
+  }, [colorsState.selected]);
 
   useEffect(() => {
     if (isFirstRun3.current) {
       isFirstRun3.current = false;
       return;
     }
-    let activeFilter = props.genders.selected;
+
+    const activeFilter = gendersState.selected;
+
     if (activeFilter.length === 0) return;
 
     if (activeFilter === "none") {
@@ -102,51 +130,110 @@ const Filter = ({
 
       setGenderSelect(dataArray);
     });
-  }, [props.genders.selected, setGenderSelect]);
+  }, [gendersState.selected]);
+
+  const addOrDeleteTypesHandler = (url, action) => {
+    setTypesState((prevState) => {
+      const { selected } = prevState;
+      let newSelected;
+
+      if (action === "add") {
+        newSelected = [...selected, url];
+      }
+
+      if (action === "remove") {
+        newSelected = selected.filter((urlActive) => !url.includes(urlActive));
+      }
+      return {
+        ...prevState,
+        selected: newSelected,
+      };
+    });
+  };
+
+  const clickMoreOrLessHandler = () => {
+    setTypesState((prevState) => {
+      const newStateFilter = {
+        ...prevState,
+        showMore: !prevState.showMore,
+      };
+
+      if (newStateFilter.showMore) {
+        newStateFilter.types = JSON.parse(
+          localStorage.getItem("typesInStorage")
+        );
+      } else {
+        newStateFilter.types = JSON.parse(
+          localStorage.getItem("typesInStorage")
+        ).slice(0, 9);
+      }
+      return {
+        ...newStateFilter,
+      };
+    });
+  };
+
+  const addOrDeleteColorHandler = (url, action) => {
+    setColorsState((prevState) => {
+      const { selected } = prevState;
+      let newSelected;
+
+      if (action === "add") {
+        newSelected = [...selected, url];
+      }
+      if (action === "remove") {
+        newSelected = selected.filter((urlActive) => !url.includes(urlActive));
+      }
+
+      return {
+        ...prevState,
+        selected: newSelected,
+      };
+    });
+  };
+
+  const gendersHandler = (url) => {
+    setGendersState((prevState) => {
+      let newSelected = url;
+
+      return {
+        ...prevState,
+        selected: newSelected,
+      };
+    });
+  };
 
   return (
     <Fragment>
+      <Modal />
       <h5>Filter</h5>
       <div className="divider"></div>
       <TypeFilters
-        filter={props.types.types}
-        show={props.types.showMore}
-        ClickShow={clickMoreOrLess}
+        filter={typesState.types}
+        show={typesState.showMore}
+        ClickShow={clickMoreOrLessHandler}
         handlerClick={addOrDeleteTypesHandler}
       />
       <div className="divider"></div>
       <ColorFilter
-        filter={props.colors.types}
+        filter={colorsState.types}
         handlerClick={addOrDeleteColorHandler}
       />
       <div className="divider"></div>
-      <GenderFilter filter={props.genders.types} handlerPick={gendersHandler} />
+      <GenderFilter filter={gendersState.types} handlerPick={gendersHandler} />
     </Fragment>
   );
 };
 
-const mapStateToProps = (state) => ({
-  props: state.filters,
-});
-
 const mapDispatchToProps = (dispatch) => {
   return {
-    initUseEffect: (newState) =>
-      dispatch({ type: actionTypes.initUseEffect, newState }),
-    clickMoreOrLess: () => dispatch({ type: actionTypes.clickMoreOrLess }),
-    addOrDeleteTypesHandler: (url, action) =>
-      dispatch({ type: actionTypes.addOrDeleteTypesHandler, url, action }),
-    addOrDeleteColorHandler: (url, action) =>
-      dispatch({ type: actionTypes.addOrDeleteColorHandler, url, action }),
-    gendersHandler: (url) =>
-      dispatch({ type: actionTypes.gendersHandler, url }),
-    setTypeSelect: (dataArray) =>
-      dispatch({ type: actionTypes.setTypeSelect, dataArray }),
-    setColorSelect: (dataArray) =>
-      dispatch({ type: actionTypes.setColorSelect, dataArray }),
-    setGenderSelect: (dataArray) =>
-      dispatch({ type: actionTypes.setGenderSelect, dataArray }),
+    //initUseEffect: (newState) =>
+    //dispatch({ type: actionTypes.initUseEffect, newState }),
+    //clickMoreOrLess: () => dispatch({ type: actionTypes.clickMoreOrLess }),
+    setTypeSelect: (dataArray) => dispatch(setTypeSelect(dataArray)),
+    setColorSelect: (dataArray) => dispatch(setColorSelect(dataArray)),
+    setGenderSelect: (dataArray) => dispatch(setGenderSelect(dataArray)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
+export default connect(null, mapDispatchToProps)(Filter);
