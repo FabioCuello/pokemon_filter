@@ -1,23 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
+import { Buttom } from "../Buttom/Buttom";
 import M from "materialize-css";
 
 export const Modal = (props) => {
+  const isFirstRun = useRef(true);
+
   useEffect(() => {
-    const modal = document.querySelectorAll("#modal");
-    M.Modal.init(modal);
-    //if (props.showModal) {
-    //const instance = M.Modal.getInstance(modal);
-    //instance.open();
-    //}
-  }, []);
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
+    let instance = M.Modal.getInstance(
+      document.querySelector(`#${props.modalId}`)
+    );
+    instance.open();
+  }, [props]);
 
   return (
-    <div id="modal" className="modal">
+    <div id={props.modalId} className="modal">
       <div className="modal-content">{props.children}</div>
       <div className="modal-footer">
-        <button className="modal-close waves-effect waves-green btn-flat">
-          {props.closeButtomName}
-        </button>
+        <Buttom name={props.buttomName} additional={"modal-close"} />
       </div>
     </div>
   );

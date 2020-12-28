@@ -9,8 +9,8 @@ import {
   handlerMoreContent,
   changeContent,
   handlerPickPokemon,
-} from "../../store/actions/content";
-
+} from "../../store/actions/index";
+import { Buttom } from "../Buttom/Buttom";
 const Content = ({
   contentState,
   filterState,
@@ -35,34 +35,34 @@ const Content = ({
       isFirstRun_1.current = false;
       return;
     }
+    console.log("UseEffect content");
 
     changeContent(filterState.selected, filterState.searchBox);
   }, [filterState.selected, filterState.searchBox, changeContent]);
 
   return (
     <Fragment>
-      {console.log("Rendering Component")}
+      {console.log("Rendering Component", contentState)}
       <Paragraph pokemons={contentState.pokemons.list} />
 
       <Cards pokemons={contentState.pokemons.list} click={handlerPickPokemon} />
 
       <div className="row">
         <div className="col offset-s3">
-          {contentState.buttonOn ? (
-            <button
-              className="offset-s6 waves-effect waves-light btn"
-              onClick={() => {
+          {contentState.buttonOn && (
+            <Buttom
+              name={"Load More"}
+              click={() => {
                 handlerMoreContent(filterState.selected);
               }}
-            >
-              Load More
-            </button>
-          ) : null}
+            />
+          )}
         </div>
       </div>
     </Fragment>
   );
 };
+
 const mapStateToProps = (state) => ({
   contentState: state.content,
   filterState: state.filters,

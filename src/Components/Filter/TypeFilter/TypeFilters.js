@@ -3,7 +3,6 @@ import { BoxFilter } from "./BoxFilter/BoxFilter";
 import { capitalize } from "../../../lib/Capitalize";
 
 export const TypeFilters = (props) => {
-  console.log("Is rendering...");
   const boxFilter = props.filter.map((el, index) => (
     <BoxFilter
       name={capitalize(el.name)}

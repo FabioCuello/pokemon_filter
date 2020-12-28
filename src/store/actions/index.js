@@ -1,9 +1,4 @@
-export {
-  initContent,
-  handlerMoreContent,
-  changeContent,
-  handlerPickPokemon,
-} from "./content";
+export { initContent, handlerMoreContent, changeContent } from "./content";
 export {
   setTypeSelect,
   setColorSelect,
@@ -11,3 +6,4 @@ export {
   changeInput,
   filterInput,
 } from "./filters";
+export { handlerPickPokemon } from "./modal";

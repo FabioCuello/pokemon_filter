@@ -21,10 +21,3 @@ export const changeContent = (stateSelected, stateSearchbox) => {
     stateSearchbox,
   };
 };
-
-export const handlerPickPokemon = (id) => {
-  return {
-    type: actionsTypes.handlerPickPokemon,
-    id,
-  };
-};

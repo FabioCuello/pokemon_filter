@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { Modal } from "../Modal/Modal";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import { TypeFilters } from "./TypeFilter/TypeFilters";
@@ -205,7 +204,7 @@ const Filter = ({ setTypeSelect, setColorSelect, setGenderSelect }) => {
 
   return (
     <Fragment>
-      <Modal />
+      {console.log("Rendering Filter")}
       <h5>Filter</h5>
       <div className="divider"></div>
       <TypeFilters
@@ -227,9 +226,6 @@ const Filter = ({ setTypeSelect, setColorSelect, setGenderSelect }) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    //initUseEffect: (newState) =>
-    //dispatch({ type: actionTypes.initUseEffect, newState }),
-    //clickMoreOrLess: () => dispatch({ type: actionTypes.clickMoreOrLess }),
     setTypeSelect: (dataArray) => dispatch(setTypeSelect(dataArray)),
     setColorSelect: (dataArray) => dispatch(setColorSelect(dataArray)),
     setGenderSelect: (dataArray) => dispatch(setGenderSelect(dataArray)),

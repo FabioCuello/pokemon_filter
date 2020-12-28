@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import M from "materialize-css";
 import Navbar from "./Components/Navbar/Navbar";
 import Filter from "./Components/Filter/Filter";
 import Content from "./Components/Content/Content";
@@ -6,6 +7,11 @@ import PokemonModal from "./Components/ModalContent/ModalContent";
 import "./App.css";
 
 function App() {
+  useEffect(() => {
+    const element = document.querySelectorAll(`.modal`);
+    M.Modal.init(element.current);
+  }, []);
+
   return (
     <div className="App">
       <Navbar />
