@@ -1,0 +1,70 @@
+{
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
+  "extends": [
+    "airbnb",
+    "airbnb/hooks",
+    "eslint-config-prettier",
+    "plugin:react/recommended"
+  ],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 11,
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "settings": {
+    "react": {
+      "version": "16.9.0"
+    }
+  },
+  "rules": {
+    "import/no-unresolved": [
+      2, 
+      { "caseSensitive": false }
+   ],
+    "strict": ["error", "never"],
+    "camelcase": 0,
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".jsx", ".json"]
+      }
+    ],
+    "comma-dangle": ["error", "never"],
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "local",
+        "args": "none"
+      }
+    ],
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "labelComponents": ["label"],
+        "labelAttributes": ["htmlFor"],
+        "controlComponents": ["input"]
+      }
+    ],
+    "react/jsx-props-no-spreading": "off",
+    "no-console": ["error", { "allow": ["warn", "error", "info"] }],
+    "import/prefer-default-export": "off",
+    "import/no-mutable-exports": "off",
+    "no-unused-expressions": ["error", { "allowShortCircuit": true }],
+    "no-underscore-dangle": [
+      "error",
+      { "allow": ["__REDUX_DEVTOOLS_EXTENSION__"] }
+    ],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "react-hooks/exhaustive-deps": "off",
+    "no-restricted-syntax": "off",
+    "no-plusplus": "off",
+    "react/jsx-curly-newline": "off"
+  }
+}

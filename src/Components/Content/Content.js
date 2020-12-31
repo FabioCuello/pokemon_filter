@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import Cards from "./Cards/Cards";
 import { Paragraph } from "./Paragraph/Paragraph";
+import { Buttom } from "../Buttom/Buttom";
 import "materialize-css";
 import {
   initContent,
@@ -10,7 +11,6 @@ import {
   changeContent,
   handlerPickPokemon,
 } from "../../store/actions/index";
-import { Buttom } from "../Buttom/Buttom";
 const Content = ({
   contentState,
   filterState,
