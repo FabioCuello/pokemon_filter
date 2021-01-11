@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import M from 'materialize-css';
-import Navbar from './Components/Navbar/Navbar';
-import Filter from './Components/Filter/Filter';
-import Content from './Components/Content/Content';
-import PokemonModal from './Components/ModalContent/ModalContent';
-import './App.css';
+import Navbar from '../Components/Navbar/Navbar';
+import Filter from '../Components/Filter/Filter';
+import Content from '../Components/Content/Content';
+import PokemonModal from '../Components/ModalContent/ModalContent';
+import '../App.css';
 
-function App() {
+export const Home = () => {
   useEffect(() => {
     const element = document.querySelectorAll(`.modal`);
     M.Modal.init(element.current);
@@ -28,6 +28,4 @@ function App() {
       </div>
     </div>
   );
-}
-
-export default App;
+};
