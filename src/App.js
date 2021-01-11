@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import M from 'materialize-css';
 import Navbar from './Components/Navbar/Navbar';
 import Filter from './Components/Filter/Filter';
