@@ -1,10 +1,12 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import M from 'materialize-css';
 import Navbar from './Components/Navbar/Navbar';
 import Filter from './Components/Filter/Filter';
 import Content from './Components/Content/Content';
 import PokemonModal from './Components/ModalContent/ModalContent';
 import './App.css';
+
+console.log('asd');
 
 function App() {
   useEffect(() => {
